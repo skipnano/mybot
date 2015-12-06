@@ -43,6 +43,8 @@ function progressCalc(ais) {
 	return completedAI;
 }
 
+/*Sprint Bot*/
+
 /*
 OPTION 2
 Create an object constructor for three developers' sprint data (name, assigned, completed, inProgress)
@@ -56,38 +58,34 @@ var Developer = function(name, assigned, completed, inProgress) {
 	this.assigned = assigned;
 	this.completed = completed;
 	this.inProgress = inProgress;
+	// this creates a new function inside of Devloper object
+	this.progress = function () {
+		var percent = Math.floor(this.completed / this.assigned)*100;
+		return percent;
+	}
 }
 
-function.prototype.progress = function() {
-	return (this.completed / this.assigned)*100;
-}
+// This re-opens the Developer object and adds a function to it. This can be achieved within the Devloper object - see above
+// Developer.prototype.progress = function() {
+// 	var percent = (this.completed / this.assigned)*100;
+// 	return percent;
+// }
 
 var ben = new Developer( 'Ben', 20, 16, 2 );
 var julia = new Developer( 'Julia', 30, 25, 3 );
 var charlie = new Developer( 'Charlie', 15, 5, 1 );
-
-var developers = [
+// This allows the bot to match a user input
+var developers = {
 	ben: ben,
 	julia: julia,
-	charlie: charlie;
-];
+	charlie: charlie
+};
 
 module.exports = function(robot) {
 	robot.respond(/sprint progress for (.*)/i, function(msg) {
-
+		// msg.send("hello")
 		var devName = msg.match[1];
-		if(developers[0]){
-			var progResult = developers['ben'].progress();
-			return msg.send(devName + "/'s progress is " + progResult);
-		} else if(developers[1]) {
-			var progResult = developers['julia'].progress();
-			return msg.send(devName + "/'s progress is " + progResult);
-		} else if(developers[2]) {
-			var progResult = developers['charlie'].progress();
-			return msg.send(devName + "/'s progress is " + progResult);)
-		} else {
-			return ('Stop making up names :sadface;');
-		}
-
+		var developer = developers[devName];
+		msg.send(developer.name + "'s progress is " + developer.progress() + "%");
 	});
 }
