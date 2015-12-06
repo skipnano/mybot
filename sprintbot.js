@@ -83,4 +83,9 @@ module.exports = function(robot) {
 		var developer = developers[devName];
 		msg.send(developer.name + "'s sprint is " + developer.progress() + "% complete");
 	});
+	robot.respond(/stories in progress for (.*)/i, function(msg) {
+		var devName = msg.match[1];
+		var developer = developers[devName];
+		msg.send(developer.name + " is working on " + developer.inProgress + " stories");
+	});
 }
